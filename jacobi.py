@@ -24,17 +24,23 @@ def rotate_matrix(A, p, q, O):
     return np.transpose(R) @ A @ R
 
 
-A = np.array([[4, 2, 7], [2, 5, 3], [7, 3, 8]])
-O = rotation_angle(A, 1, 3)
-print(O)
-print(rotate_matrix(A, 1, 3, O))
-
-
 def off_diagonal(A):
-    pass
-    # return sum of off-diagonal norms to know when to stop
+    # return sum of off-diagonal squares to know when to stop
+    sq_A = A * A
+    sq_sum = np.sum(sq_A)
+    sq_diag = np.sum(np.diag(sq_A))
+
+    off_sq_sum = sq_sum - sq_diag
+    return off_sq_sum
 
 
 def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
     pass
     # run jacobi
+
+
+A = np.array([[4, 2, 7], [2, 5, 3], [7, 3, 8]])
+print(off_diagonal(A))
+O = rotation_angle(A, 1, 3)
+print(O)
+print(rotate_matrix(A, 1, 3, O))
