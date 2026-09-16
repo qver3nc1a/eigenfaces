@@ -9,7 +9,7 @@ def rotation_angle(A, p, q):
     return 0.5 * atan2(2 * A[p][q], (A[q][q] - A[p][p]))
 
 
-def rotate_matrix(A, p, q, O):
+def rotate_matrix(A, V, p, q, O):
     # build the rotation matrix R (and return new A with A_pq = 0)
     R = np.identity(len(A[0]))
     R[p][p] = cos(O)
@@ -17,7 +17,7 @@ def rotate_matrix(A, p, q, O):
     R[p][q] = sin(O)
     R[q][p] = -sin(O)
 
-    return np.transpose(R) @ A @ R
+    return np.transpose(R) @ A @ R, V @ R
 
 
 def off_diagonal(A):
@@ -30,10 +30,10 @@ def off_diagonal(A):
     return off_sq_sum
 
 
-def jacobi_cycle(A):
+def jacobi_cycle(A, V):
     # max off-diagonal value norm
-    mask = np.ones(A.shape)
-    np.fill_diagonal(mask, 0)
+    mask = np.ones(A.shape, dtype=bool)
+    np.fill_diagonal(mask, False)
     max_off_value = np.abs(A[mask]).max()
 
     # coordinates
@@ -44,8 +44,8 @@ def jacobi_cycle(A):
     O = rotation_angle(A, p, q)
 
     # R and A_new
-    A_new = rotate_matrix(A, p, q, O)
-    return A_new
+    A_new, V_new = rotate_matrix(A, V, p, q, O)
+    return A_new, V_new
 
 
 def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
@@ -53,6 +53,8 @@ def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
     if not np.array_equal(A, np.transpose(A)):
         return  # error
     sweeps = 0
+    A = A.copy()  # keep global matrix unchanged
+    V = np.identity(A.shape[0])
     while True:
         curr_off_sq_sum = off_diagonal(A)
         if curr_off_sq_sum < tolerance:
@@ -60,13 +62,9 @@ def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
         if sweeps >= max_sweeps:
             break
 
-        A = jacobi_cycle(A)
+        A, V = jacobi_cycle(A, V)
         sweeps += 1
-    return A
 
-
-A = np.array([[4, 2, 7], [2, 5, 3], [7, 3, 8]])
-print(off_diagonal(A))
-O = rotation_angle(A, 1, 3)
-print(O)
-print(rotate_matrix(A, 1, 3, O))
+    eigenvalues = np.diag(A)
+    eigenvectors = V
+    return eigenvalues, eigenvectors
