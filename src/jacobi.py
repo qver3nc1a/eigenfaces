@@ -31,32 +31,27 @@ def off_diagonal(A):
 
 
 def jacobi_cycle(A, V):
-    # max off-diagonal value norm
-    mask = np.ones(A.shape, dtype=bool)
-    np.fill_diagonal(mask, False)
-    max_off_value = np.abs(A[mask]).max()
+    n = A.shape[0]
 
-    # coordinates
-    p, q = np.where(np.abs(A) == max_off_value)
-    p, q = p[0], q[0]
-
-    # rotation angle
-    O = rotation_angle(A, p, q)
-
-    # R and A_new
-    A_new, V_new = rotate_matrix(A, V, p, q, O)
-    return A_new, V_new
+    for p in range(n - 1):
+        for q in range(p + 1, n):
+            O = rotation_angle(A, p, q)
+            A, V = rotate_matrix(A, V, p, q, O)
+    return A, V
 
 
 def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
     # run jacobi
     if not np.array_equal(A, np.transpose(A)):
         return  # error
+
     sweeps = 0
     A = A.copy()  # keep global matrix unchanged
     V = np.identity(A.shape[0])
+
     while True:
         curr_off_sq_sum = off_diagonal(A)
+
         if curr_off_sq_sum < tolerance:
             break
         if sweeps >= max_sweeps:
