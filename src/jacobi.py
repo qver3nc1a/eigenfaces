@@ -62,4 +62,9 @@ def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
 
     eigenvalues = np.diag(A)
     eigenvectors = V
+
+    indices = np.argsort(eigenvalues)[::-1]
+    eigenvalues = eigenvalues[indices]
+    eigenvectors = eigenvectors[:, indices]
+
     return eigenvalues, eigenvectors
