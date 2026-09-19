@@ -65,4 +65,30 @@ def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
     eigenvalues = eigenvalues[indices]
     eigenvectors = eigenvectors[:, indices]
 
-    return eigenvalues, eigenvectors
+    return eigenvalues, eigenvectors, sweeps
+
+
+rng = np.random.default_rng(seed=42)
+
+B1 = rng.random((20, 20))
+A1 = 1e6 * (B1 + np.transpose(B1))
+
+B2 = rng.random((20, 20))
+A2 = 1e6 * (B2 + np.transpose(B2))
+
+B3 = rng.random((20, 20))
+A3 = 1e6 * (B3 + np.transpose(B3))
+
+B4 = rng.random((20, 20))
+A4 = 1e6 * (B4 + np.transpose(B4))
+
+B5 = rng.random((20, 20))
+A5 = 1e6 * (B5 + np.transpose(B5))
+
+e1, e2, sweeps1 = jacobi(A1, tolerance=10 ** (-10), max_sweeps=50)
+e1, e2, sweeps2 = jacobi(A2, tolerance=10 ** (-10), max_sweeps=50)
+e1, e2, sweeps3 = jacobi(A3, tolerance=10 ** (-10), max_sweeps=50)
+e1, e2, sweeps4 = jacobi(A4, tolerance=10 ** (-10), max_sweeps=50)
+e1, e2, sweeps5 = jacobi(A5, tolerance=10 ** (-10), max_sweeps=50)
+
+print(sweeps1, sweeps2, sweeps3, sweeps4, sweeps5)
