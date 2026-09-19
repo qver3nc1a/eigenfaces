@@ -41,7 +41,7 @@ def jacobi_cycle(A, V):
 def jacobi(A, tolerance=10 ** (-15), max_sweeps=50):
     # run jacobi
     if not np.array_equal(A, np.transpose(A)):
-        raise Exception("Matrix must be symmetrical")
+        raise Exception("Matrix must be symmetric")
 
     sweeps = 0
     A = A.copy()  # keep global matrix unchanged
