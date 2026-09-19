@@ -8,6 +8,15 @@ def test_off_diagonal():
     assert off_diagonal(A) == 13
 
 
+def test_off_diagonal1e8():
+    A = np.diag([1e8, 2e8, 3e8])
+    A[0, 1] = 1e-3
+    A[1, 0] = 1e-3
+
+    off = off_diagonal(A)
+    assert off == 2 * 1e-6
+
+
 def test_jacobi_2x2():
     A = np.array([[2, 1], [1, 2]])
     eigenvalues, eigenvectors = jacobi(A)
