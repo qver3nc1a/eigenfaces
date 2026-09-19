@@ -47,6 +47,6 @@ def test_sweeps(scale, seed):
     B = rng.random((20, 20))
     A = scale * (B + np.transpose(B))
 
-    eigenvalues, eigenvectors, sweeps = jacobi(A, tolerance=10 ** (-15), max_sweeps=50)
+    eigenvalues, eigenvectors, sweeps = jacobi(A, tolerance=10 ** (-16), max_sweeps=50)
     assert sweeps < 15
     assert np.allclose(A @ eigenvectors, eigenvalues * eigenvectors)

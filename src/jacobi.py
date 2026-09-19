@@ -38,7 +38,7 @@ def jacobi_cycle(A, V):
     return A, V
 
 
-def jacobi(A, tolerance=10 ** (-15), max_sweeps=50):
+def jacobi(A, tolerance=10 ** (-16), max_sweeps=50):
     # run jacobi
     if not np.array_equal(A, np.transpose(A)):
         raise Exception("Matrix must be symmetric")
