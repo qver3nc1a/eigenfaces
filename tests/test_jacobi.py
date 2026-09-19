@@ -48,4 +48,4 @@ def test_sweeps(scale, seed):
     A = scale * (B + np.transpose(B))
 
     e1, e2, sweeps = jacobi(A, tolerance=10 ** (-10), max_sweeps=50)
-    assert sweeps <= 50
+    assert sweeps < 15
