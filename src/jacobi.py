@@ -22,10 +22,11 @@ def rotate_matrix(A, V, p, q, O):
 
 def off_diagonal(A):
     # return sum of off-diagonal squares to know when to stop
-    A_off = A.copy()
-    np.fill_diagonal(A_off, 0)
-
-    return np.sum(A_off * A_off)
+    sq_A = A * A
+    sq_sum = np.sum(sq_A)
+    sq_diag = np.sum(np.diag(sq_A))
+    off_sq_sum = sq_sum - sq_diag
+    return off_sq_sum
 
 
 def jacobi_cycle(A, V):
