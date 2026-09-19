@@ -47,10 +47,13 @@ def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
     A = A.copy()  # keep global matrix unchanged
     V = np.identity(A.shape[0])
 
+    A_sq = np.sum(A * A)
+    aaa = A_sq / tolerance
+
     while True:
         curr_off_sq_sum = off_diagonal(A)
 
-        if curr_off_sq_sum < tolerance:
+        if curr_off_sq_sum / A_sq < tolerance:
             break
         if sweeps >= max_sweeps:
             break
@@ -65,4 +68,4 @@ def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
     eigenvalues = eigenvalues[indices]
     eigenvectors = eigenvectors[:, indices]
 
-    return eigenvalues, eigenvectors, sweeps
+    return eigenvalues, eigenvectors, sweeps, A_sq, aaa
