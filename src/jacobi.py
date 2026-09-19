@@ -38,7 +38,7 @@ def jacobi_cycle(A, V):
     return A, V
 
 
-def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
+def jacobi(A, tolerance=10 ** (-15), max_sweeps=50):
     # run jacobi
     if not np.array_equal(A, np.transpose(A)):
         return  # error
@@ -68,4 +68,4 @@ def jacobi(A, tolerance=10 ** (-10), max_sweeps=50):
     eigenvalues = eigenvalues[indices]
     eigenvectors = eigenvectors[:, indices]
 
-    return eigenvalues, eigenvectors, sweeps, A_sq, aaa
+    return eigenvalues, eigenvectors, sweeps
