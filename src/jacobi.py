@@ -53,7 +53,7 @@ def jacobi(A, tolerance=10 ** (-15), max_sweeps=50):
     while True:
         curr_off_sq_sum = off_diagonal(A)
 
-        if curr_off_sq_sum / A_sq < tolerance:
+        if curr_off_sq_sum < tolerance * A_sq:
             break
         if sweeps >= max_sweeps:
             break
