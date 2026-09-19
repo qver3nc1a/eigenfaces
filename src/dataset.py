@@ -1,13 +1,46 @@
-from sklearn.datasets import fetch_olivetti_faces
 from pathlib import Path
 from PIL import Image
+import numpy as np
 
-faces = fetch_olivetti_faces()
+train_images = []
+train_labels = []
 
-for i, image in enumerate(faces.images):
-    person = faces.target[i] + 1
-    folder = Path("data") / f"s{person:02d}"
-    folder.mkdir(parents=True, exist_ok=True)
+valid_images = []
+valid_labels = []
 
-    image = Image.fromarray((image * 255).astype("uint8"))
-    image.save(folder / f"{i:02d}.png")
+for person in range(1, 41):
+    print(f"loading person {person}/40...")
+    folder = Path(f"data/s{person:02d}")
+    image_paths = list(folder.iterdir())
+
+    rng = np.random.default_rng(42)
+    idx = rng.permutation(10)
+    train_idx = idx[:7]
+    valid_idx = idx[7:]
+
+    for i in train_idx:
+        image = Image.open(image_paths[i])
+        image.resize((64, 64))
+        image = np.array(image).flatten()
+        train_images.append(image)
+        train_labels.append(person)
+
+    for i in valid_idx:
+        image = Image.open(image_paths[i])
+        image = np.array(image).flatten()
+        valid_images.append(image)
+        valid_images.append(person)
+
+A_train = np.array(train_images)
+y_train = np.array(train_labels)
+
+A_valid = np.array(valid_images)
+y_valid = np.array(valid_labels)
+
+print(A_train.shape)
+print(A_train.min())
+print(A_train.max())
+
+print(A_valid.shape)
+print(A_valid.min())
+print(A_valid.max())
