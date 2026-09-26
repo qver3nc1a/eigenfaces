@@ -53,8 +53,21 @@ def nearest_neighbor(Z_train, y_train, Z_valid):
 # main flow
 mean, F_train = average_face(A_train)
 
-k = 30
-eigenvalues, U, sweeps = eigenfaces(F_train, k)
+L = covariance(F_train)
+eigenvalues, V, sweeps = jacobi(L)
+
+total_eig = sum(eigenvalues)
+curr = 0
+for i, value in enumerate(eigenvalues):
+    curr += value
+    if curr / total_eig >= 0.95:
+        k = i
+        break
+
+V_k = V[:, :k]
+
+U = np.transpose(F_train) @ V_k
+U = U / np.linalg.norm(U, axis=0)
 
 Z_train = project(A_train, mean, U)  # weights Ω for all training faces
 Z_valid = project(A_valid, mean, U)
