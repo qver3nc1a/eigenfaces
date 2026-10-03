@@ -61,7 +61,7 @@ curr = 0
 for i, value in enumerate(eigenvalues):
     curr += value
     if curr / total_eig >= 0.95:
-        k = i
+        k = i + 1
         break
 
 V_k = V[:, :k]
