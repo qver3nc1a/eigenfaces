@@ -56,7 +56,7 @@ def test_covariance_symmetric():
 def test_eigenfaces_sanity():
     F = np.array([[1.0, 2.0], [2.0, -1.0], [0.0, 1.0], [-2.0, 1.0]])
     eigenvalues, U, sweeps = eigenfaces(F, k=1)
-    assert eigenvalues.shape == (1, 1)
+    assert eigenvalues.shape == (1,)
     assert U.shape == (2, 1)
     assert sweeps > 0
     assert np.allclose(np.linalg.norm(U), 1)
