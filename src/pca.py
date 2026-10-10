@@ -4,8 +4,6 @@ from PIL import Image
 from dataset import load_data
 from jacobi import jacobi
 
-A_train, A_valid, y_train, y_valid = load_data()
-
 
 # calculate average face Ψ=1/M*∑​Γ_i and Φi​=Γi​−Ψ​
 def average_face(A):
@@ -50,47 +48,49 @@ def nearest_neighbor(Z_train, y_train, Z_valid):
     return np.array(predictions)
 
 
-# main flow
-mean, F_train = average_face(A_train)
+if __name__ == "__main__":
+    A_train, A_valid, y_train, y_valid = load_data()
 
-L = covariance(F_train)
-eigenvalues, V, sweeps = jacobi(L)
+    mean, F_train = average_face(A_train)
 
-total_eig = sum(eigenvalues)
-curr = 0
-for i, value in enumerate(eigenvalues):
-    curr += value
-    if curr / total_eig >= 0.95:
-        k = i + 1
-        break
+    L = covariance(F_train)
+    eigenvalues, V, sweeps = jacobi(L)
 
-V_k = V[:, :k]
+    total_eig = sum(eigenvalues)
+    curr = 0
+    for i, value in enumerate(eigenvalues):
+        curr += value
+        if curr / total_eig >= 0.95:
+            k = i + 1
+            break
 
-U = np.transpose(F_train) @ V_k
-U = U / np.linalg.norm(U, axis=0)
+    V_k = V[:, :k]
 
-Z_train = project(A_train, mean, U)  # weights Ω for all training faces
-Z_valid = project(A_valid, mean, U)
+    U = np.transpose(F_train) @ V_k
+    U = U / np.linalg.norm(U, axis=0)
 
-y_pred = nearest_neighbor(Z_train, y_train, Z_valid)
-accuracy = np.mean(y_pred == y_valid)
+    Z_train = project(A_train, mean, U)  # weights Ω for all training faces
+    Z_valid = project(A_valid, mean, U)
 
-print("sweeps:", sweeps)
-print("accuracy:", accuracy)
+    y_pred = nearest_neighbor(Z_train, y_train, Z_valid)
+    accuracy = np.mean(y_pred == y_valid)
 
-"""
-def save_centered_faces(F, output_dir, shape=(64, 64)):
-    output_dir.mkdir(exist_ok=True)
+    print("sweeps:", sweeps)
+    print("accuracy:", accuracy)
 
-    for i, face in enumerate(F):
-        image = face.reshape(shape)
-        image = image - image.min()
-        if image.max() != 0:
-            image = image / image.max() * 255
-        image = Image.fromarray(image.astype("uint8"))
-        image.save(output_dir / f"centered_{i:03d}.png")
+    """
+    def save_centered_faces(F, output_dir, shape=(64, 64)):
+        output_dir.mkdir(exist_ok=True)
+
+        for i, face in enumerate(F):
+            image = face.reshape(shape)
+            image = image - image.min()
+            if image.max() != 0:
+                image = image / image.max() * 255
+            image = Image.fromarray(image.astype("uint8"))
+            image.save(output_dir / f"centered_{i:03d}.png")
 
 
-mean, F = average_face(A_train)
-save_centered_faces(F, Path("centered_faces"))
-"""
+    mean, F = average_face(A_train)
+    save_centered_faces(F, Path("centered_faces"))
+    """
