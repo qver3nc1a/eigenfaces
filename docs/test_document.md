@@ -48,8 +48,8 @@ poetry run pytest tests/test_pca.py -v
 ```
 
 ## Results
-- Number of tests: 24
-- Passed: 24
+- Number of tests: 27
+- Passed: 27
 
 ### Coverage report
 |Name            | Stmts | Miss | Cover |
