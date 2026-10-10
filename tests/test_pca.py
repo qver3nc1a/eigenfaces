@@ -20,6 +20,26 @@ def test_average_face():
     assert np.allclose(F, expected_F)
 
 
+def test_covariance_values():
+    F = np.array(
+        [
+            [1.0, 2.0],
+            [3.0, 4.0],
+        ]
+    )
+
+    C = covariance(F)
+
+    expected = np.array(
+        [
+            [5.0, 11.0],
+            [11.0, 25.0],
+        ]
+    )
+
+    assert np.allclose(C, expected)
+
+
 def test_covariance_symmetric():
     F = np.array(
         [
@@ -31,6 +51,31 @@ def test_covariance_symmetric():
     C = covariance(F)
     assert C.shape == (3, 3)
     assert np.allclose(C, np.transpose(C))
+
+
+def test_eigenfaces_sanity():
+    F = np.array([[1.0, 2.0], [2.0, -1.0], [0.0, 1.0], [-2.0, 1.0]])
+    eigenvalues, U, sweeps = eigenfaces(F, k=1)
+    assert eigenvalues.shape == (1, 1)
+    assert U.shape == (2, 1)
+    assert sweeps > 0
+    assert np.allclose(np.linalg.norm(U), 1)
+
+
+def test_project():
+    A = np.array(
+        [
+            [1.0, 2.0],
+            [3.0, 4.0],
+        ]
+    )
+    mean = np.array([1.0, 4.0])
+    U = np.array([1.0, 0.0])
+
+    proj = project(A, mean, U)
+
+    expected_proj = np.array([[0.0, 2.0]])
+    assert np.allclose(proj, expected_proj)
 
 
 def test_nearest_neighbor():
