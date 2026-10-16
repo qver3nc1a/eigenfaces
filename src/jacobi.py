@@ -11,13 +11,39 @@ def rotation_angle(A, p, q):
 
 def rotate_matrix(A, V, p, q, O):
     # build the rotation matrix R (and return new A with A_pq = 0)
-    R = np.identity(len(A[0]))
-    R[p][p] = cos(O)
-    R[q][q] = cos(O)
-    R[p][q] = sin(O)
-    R[q][p] = -sin(O)
+    cosini = cos(O)
+    sini = sin(O)
 
-    return np.transpose(R) @ A @ R, V @ R
+    # values outside inner rotation square
+    for k in range(len(A[0])):
+        if k != p and k != q:
+            Akp = A[k, p]
+            Akq = A[k, q]
+
+            A[k, p] = cosini * Akp - sini * Akq
+            A[k, q] = sini * Akp + cosini * Akq
+
+            A[p, k] = A[k, p]
+            A[q, k] = A[k, q]
+
+    # values inside inner rotation square
+    App = A[p, p]
+    Aqq = A[q, q]
+    Apq = A[p, q]
+
+    A[p, p] = cosini**2 * App - 2 * cosini * sini * Apq + sini**2 * Aqq
+    A[q, q] = sini**2 * App + 2 * cosini * sini * Apq + cosini**2 * Aqq
+    A[p, q] = cosini * sini * (App - Aqq) + (cosini**2 - sini**2) * Apq
+    A[q, p] = A[p, q]
+
+    # remember rotations in V
+    Vp = V[:, p].copy()
+    Vq = V[:, q].copy()
+
+    V[:, p] = cosini * Vp - sini * Vq
+    V[:, q] = sini * Vp + cosini * Vq
+
+    return A, V
 
 
 def off_diagonal(A):
@@ -48,7 +74,6 @@ def jacobi(A, tolerance=10 ** (-16), max_sweeps=50):
     V = np.identity(A.shape[0])
 
     A_sq = np.sum(A * A)
-    aaa = A_sq / tolerance
 
     while True:
         curr_off_sq_sum = off_diagonal(A)
