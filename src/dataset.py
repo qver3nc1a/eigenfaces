@@ -4,11 +4,19 @@ import numpy as np
 
 
 def load_data():
+    print("Checking for cached data...")
+    cache = Path("data/cache.npz")
+    if cache.exists():
+        print("Found cached data, loading")
+        data = np.load(cache)
+        return data["A_train"], data["A_valid"], data["y_train"], data["y_valid"]
     train_images = []
     train_labels = []
 
     valid_images = []
     valid_labels = []
+
+    print("Cached data not found, loading faces")
     for person in range(1, 41):
         print(f"loading person {person}/40...")
         folder = Path(f"data/s{person:02d}")
@@ -39,4 +47,12 @@ def load_data():
     A_valid = np.array(valid_images)
     y_valid = np.array(valid_labels)
 
+    # save data to avoid reading images with each run
+    np.savez(
+        "data/cache.npz",
+        A_train=A_train,
+        A_valid=A_valid,
+        y_train=y_train,
+        y_valid=y_valid,
+    )
     return (A_train, A_valid, y_train, y_valid)
