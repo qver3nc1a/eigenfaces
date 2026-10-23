@@ -59,7 +59,8 @@ def test_eigenfaces_sanity():
     assert eigenvalues.shape == (1,)
     assert U.shape == (2, 1)
     assert sweeps > 0
-    assert np.allclose(np.linalg.norm(U), 1)
+    C = covariance(np.transpose(F))
+    assert np.allclose(C @ U, U @ np.diag(eigenvalues))
 
 
 def test_project():
@@ -104,3 +105,34 @@ def test_pca():
     y_pred = nearest_neighbor(Z_train, y_train, Z_valid)
 
     assert np.array_equal(y_pred, y_valid)
+
+
+def test_average_face_mean_0():
+    A = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
+    mean, F = average_face(A)
+
+    assert np.allclose(F.mean(axis=0), 0)
+
+
+def test_eigenfaces_are_eigenvectors_of_covariance():
+    F = np.array(
+        [
+            [1.0, 0.0, 1.0],
+            [0.0, 1.0, 1.0],
+            [-1.0, 0.0, -1.0],
+            [0.0, -1.0, -1.0],
+        ]
+    )
+    eigenvalues, U, sweeps = eigenfaces(F, k=2)
+    C = covariance(np.transpose(F))
+
+    assert np.allclose(C @ U, U @ np.diag(eigenvalues))
+
+
+def test_nearest_neighbor_with_empty_validation():
+    Z_train = np.array([[0.0, 0.0], [1.0, 1.0]])
+    y_train = np.array(["A", "B"])
+    Z_valid = np.empty((0, 2))
+
+    pred = nearest_neighbor(Z_train, y_train, Z_valid)
+    assert pred.shape == (0,)
