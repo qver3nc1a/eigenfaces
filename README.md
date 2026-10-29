@@ -11,6 +11,7 @@ A computer vision program that recognizes human faces using the Eigenfaces algor
 - [Week 3](docs/weekly-reports/week_3.md)
 - [Week 4](docs/weekly-reports/week_4.md)
 - [Week 5](docs/weekly-reports/week_5.md)
+- [Week 6](docs/weekly-reports/week_6.md)
 
 ## Usage
 For installation and running the program see the [User Guide](docs/user_guide.md)
