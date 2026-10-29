@@ -52,14 +52,20 @@ poetry run pytest tests/test_pca.py -v
 - Passed: 27
 
 ### Coverage report
-|Name            | Stmts | Miss | Cover |
-|----------------|-------|------|-------|
-|src/dataset.py  |   33  |  29  |  12%  |
-|src/jacobi.py   |   44  |   2  |  95%  |
-|src/pca.py      |   48  |  21  |  56%  |
-|TOTAL           |  125  |  52  |  58%  |
-
-The coverage report can be generated from the project root:
 ```bash
-poetry run pytest --cov=src tests/
+Name            Stmts   Miss Branch BrPart  Cover   Missing
+-----------------------------------------------------------
+src/jacobi.py      59      1     14      1    97%   84
+src/pca.py         26      0      2      0   100%
+-----------------------------------------------------------
+TOTAL              85      1     16      1    98%
+```
+
+The coverage report can be generated with:
+```bash
+poetry run coverage run --branch -m pytest
+```
+And displayed with:
+```bash
+coverage report -m
 ```
