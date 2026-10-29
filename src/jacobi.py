@@ -66,8 +66,8 @@ def jacobi_cycle(A, V):
 
 def jacobi(A, tolerance=10 ** (-16), max_sweeps=50):
     # run jacobi
-    if not np.array_equal(A, np.transpose(A)):
-        raise Exception("Matrix must be symmetric")
+    if not np.allclose(A, np.transpose(A)):
+        raise ValueError("Matrix must be symmetric")
 
     sweeps = 0
     A = A.copy()  # keep global matrix unchanged
@@ -78,7 +78,7 @@ def jacobi(A, tolerance=10 ** (-16), max_sweeps=50):
     while True:
         curr_off_sq_sum = off_diagonal(A)
 
-        if curr_off_sq_sum < tolerance * A_sq:
+        if curr_off_sq_sum <= tolerance * A_sq:
             break
         if sweeps >= max_sweeps:
             break

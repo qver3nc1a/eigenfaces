@@ -9,6 +9,7 @@ def load_data():
     if cache.exists():
         print("Found cached data, loading")
         data = np.load(cache)
+        print("Data ready, performing PCA...")
         return data["A_train"], data["A_valid"], data["y_train"], data["y_valid"]
     train_images = []
     train_labels = []
@@ -55,4 +56,5 @@ def load_data():
         y_train=y_train,
         y_valid=y_valid,
     )
+    print("Data ready, performing PCA...")
     return (A_train, A_valid, y_train, y_valid)
