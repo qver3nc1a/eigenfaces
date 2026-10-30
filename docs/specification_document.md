@@ -24,9 +24,9 @@ The main algorithm used is the Eigenfaces algorithm, which is based on Principal
 More detailed steps:
 - Images are all concatenated into one matrix A (images are flattened and in A one column is one image)
 - The average face is calculated: $Ψ=1/M * \sum_{i=1}^{n} Г_n$
-- The average face is substracted from all faces: $Ф_i=Г_i-Ψ$ -> $A=[Ф_1 Ф_2 ... Ф_n]$
+- The average face is subtracted from all faces: $Ф_i=Г_i-Ψ$ -> $A=[Ф_1 Ф_2 ... Ф_n]$
 - The covariance matrix is calculated ($C=AA^T$)
-- Eigenvalues and eigenvectors ($u$) are calculcated (Jacobi)
+- Eigenvalues and eigenvectors ($u$) are calculated (Jacobi)
 - Weights are calculated: $w_k = u_k^T*(Г-Ψ)$
 - The weight vector is created: $Ω^T=[w_1,...,w_n]$
 - Distances between projections and known individuals are calculated: $\Sigma_k=||Ω^T-Ω||$
