@@ -37,3 +37,5 @@ Training data is a dataset of images of faces. Each image is associated with the
 - [Face Recognition Using Eigenfaces, Matthew A. Turk and Alex P. Pentland](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=139758)
 - [Eigenface (wikipedia)](https://en.wikipedia.org/wiki/Eigenface)
 - [Jacobi eigenvalue algorithm (wikipedia)](https://en.wikipedia.org/wiki/Jacobi_eigenvalue_algorithm)
+- [Pytest documentation](https://docs.pytest.org/en/stable/)
+- [Python poetry documentation](https://python-poetry.org/docs/)
