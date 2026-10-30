@@ -11,6 +11,7 @@ print("Training data shape: ", A_train.shape)
 # (120, 4096) = 40 people * 3 (validation) images = 120, 64x64 pixels = 4096
 print("Validation data shape: ", A_valid.shape)
 
+print("Running PCA pipeline...")
 mean, F_train = average_face(A_train)
 
 # optimal k to explain 95% of variance
