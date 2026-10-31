@@ -49,11 +49,12 @@ print(
 )
 while True:
     answer = input()
-    if answer == "T" or answer == "t" or answer == "True" or answer == "true":
+    if answer in ("T", "t", "True", "true"):
         use_n_percent_k = True
         break
-    elif answer == "F" or answer == "f" or answer == "False" or answer == "false":
+    elif answer in ("F", "f", "False", "false"):
         use_n_percent_k = False
+        break
     else:
         print("Please choose either T (True) or F (False)")
 
@@ -63,7 +64,11 @@ if use_n_percent_k:
         "What percentage of variance would you like the chosen eigenvalues to explain? Please give your answer as a positive float (less than 1). Example: 0.95"
     )
     while True:
-        var = float(input())
+        try:
+            var = float(input())
+        except:
+            print("Make sure your answer is a float")
+            continue
         if var >= 0 and var <= 1:
             percentage = var
             break
