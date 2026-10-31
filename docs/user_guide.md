@@ -20,7 +20,7 @@ poetry run python data/load_olivetti.py
 ```
 
 ## Running the Program
-Run the program from the project root:
+Run the evaluation code from the project root:
 ```bash
-poetry run python src/pca.py
+poetry run python src/evaluate_olivetti.py
 ```
