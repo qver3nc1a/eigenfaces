@@ -4,7 +4,7 @@
 This repository is organized into documentation, data, tests, and program code the following way:
 
 - data/: images of faces from the olivetti dataset, each in 64x64 format and sorted by person
-- centered_faces/: images of centered faces (note! run )
+- centered_faces/: images of centered faces (note! run evaluate_olivetti to generate)
 - docs/: project documentation and weekly reports
 - src/: program code (jacobi, pca, dataset loader, evaluation on olivetti)
 - tests/: automated tests for jacobi and pca
@@ -28,10 +28,47 @@ More detailed steps:
 - Distances between projections and known individuals are calculated: $\Sigma_k=||Ω^T-Ω||$
 
 ## Possible flaws and improvements
-yap
+The manually implemented Jacobi method may become slow for larger datasets, since its computation cost increases with the size of the covariance matrix. Additionally, in the case where the nearest-neighbor classifier does not provide a conclusive result (when multiple persons seem to be close), a new person class should be created, as per the original paper.
 
 ## Performance of methods
-yap
+Let:
+- n = number of training images
+- m = number of validation images
+- p = number of pixels in each image
+- k = number of eigenfaces selected
+- s = number of jacobi sweeps
+
+For the Olivetti Faces dataset:
+- n = 280
+- m = 120
+- p = 4096
+
+And the centered training matrix F is of shape 280 × 4096: 280 rows (1 for each image), 4096 columns (1 for each pixel)
+
+### Average face and centering
+The program calculates the average value for every pixel. There are p pixels in n images, therefore calculating the average is O(np). Same goes for centering, so it is also O(np).
+
+### Covariance matrix
+F = n × p, transpose(F) = p × n, F @ transpose(T) = n × n
+
+The result contains n^2 values. To calculate each value, the program combines p values (matrix multiplication). Therefore, calculating the covariance matrix is O(n^2*p).
+
+### Jacobi
+A Jacobi sweep considers pairs or matrix indices. For an n × n matrix, there are n^2 pairs. For every pair, the rotation function loops through n matrix elements. Therefore, one Jacobi sweep is O(n^3) and s sweeps is O(s*n^3).
+
+### Eigenfaces
+transpose(F) = p × n, V_k = n × k, transpose(F) @ V_k = p × k. To calculate each value, the program combines n values. Therefore, the complexity of the eigenface calculations is O(p * n * k).
+
+### Projections
+The program calculates (A - mean) @ U. In total, n+m images are being projected (training and validation). The matrix dimensions are ((n+m)×p) × (p×k). The result has (n+m)×k values, and each value requries p operations. Therefore, the complexity of projecting images is O((n+m) * p * k)
+
+### Nearest-neighbor classification
+For each of the m validation images, the program compares it will all n training images. Each comparison uses k eigenface coordinates. Therefore, the complexity for the nearest-neighbor classifier is O(m  * n * k).
+
+### Total
+Combining the main steps gives O(np + n^2p + sn^3 + pnk + (n+m)pk + mnk). Here the most important term is sn^3 as it represents the Jacobi manipulations.
+
+Note! For the covariance matrix, my implementation uses F @ transpose(F), which produces a 280 × 280 matrix instead of transpose(F) @ F, which would produce a 4096 × 4096 matrix. This significantly reduces the computational cost while preserving enough information.
 
 ## LLM usage
-yap
+I used an LLM (GPT-5) as an assistant during development. Its use included explaining the mathematical steps of PCA and the eigenfaces method, helping reason about the correct range of k, and suggesting test cases and edge cases.
