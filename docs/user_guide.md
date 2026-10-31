@@ -4,7 +4,7 @@
 Clone the repository:
 
 ```bash
-https://github.com/qver3nc1a/eigenfaces.git
+git clone https://github.com/qver3nc1a/eigenfaces.git
 cd eigenfaces
 ```
 
