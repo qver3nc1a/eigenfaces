@@ -4,6 +4,11 @@ import numpy as np
 
 
 def load_data():
+    """Load and prepare data
+
+    Returns: tuple containing the training and validation images, training and validation labels
+    """
+
     print("Checking for cached data...")
     cache = Path("data/cache.npz")
     if cache.exists():

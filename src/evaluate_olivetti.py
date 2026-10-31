@@ -7,6 +7,14 @@ from pca import average_face, covariance, eigenfaces, project, nearest_neighbor
 
 
 def save_centered_faces(F, labels, output_dir, shape=(64, 64)):
+    """Save centered faces as PNG images
+
+    Args:
+        F: Matrix containing centered face images
+        labels: Person labels for each face
+        output_dir: Directory where images are to be saved
+        shape: Desired shape of images
+    """
     if output_dir.exists():
         for old_face in output_dir.rglob("*.png"):
             old_face.unlink()

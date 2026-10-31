@@ -5,12 +5,32 @@ import numpy as np
 
 
 def rotation_angle(A, p, q):
-    # calculate the rotation angle (tan(2O) = 2a_pq/a_qq-a_pp)
+    """Calculate the Jacobi rotation angle for two matrix elements (tan(2O) = 2a_pq/a_qq-a_pp)
+
+    Args:
+        A: Symmetric matrix
+        p: First index
+        q: Second index
+
+    Returns:
+        Rotation angle that reduces the off-diagonal element A[p, q]
+    """
     return 0.5 * atan2(2 * A[p][q], (A[q][q] - A[p][p]))
 
 
 def rotate_matrix(A, V, p, q, O):
-    # build the rotation matrix R (and return new A with A_pq = 0)
+    """Apply one Jacobi rotation
+
+    Args:
+        A: Symmetric matrix
+        V: Matrix with the accumulated eigenvectors in columns
+        p: First index
+        q: Second index
+        O: Rotation angle
+
+    Returns:
+        Tuple containing the rotated matrix and updated eigenvector matrix
+    """
     cosini = cos(O)
     sini = sin(O)
 
@@ -47,7 +67,14 @@ def rotate_matrix(A, V, p, q, O):
 
 
 def off_diagonal(A):
-    # return sum of off-diagonal squares to know when to stop
+    """Calculate sum of off-diagonal squares to know when to stop
+
+    Args:
+        A: Matrix whose off-diagonal elements should be measured
+
+    Returns:
+        Sum of the squares of all off-diagonal elements
+    """
     A_off = A.copy()
     np.fill_diagonal(A_off, 0)
 
@@ -55,6 +82,15 @@ def off_diagonal(A):
 
 
 def jacobi_cycle(A, V):
+    """Perform one Jacobi sweep
+
+    Args:
+        A: Symmetric matrix
+        V: Matrix with the accumulated eigenvectors in columns
+
+    Returns:
+        Tuple containing the updated matrix and eigenvector matrix
+    """
     n = A.shape[0]
 
     for p in range(n - 1):
@@ -65,7 +101,17 @@ def jacobi_cycle(A, V):
 
 
 def jacobi(A, tolerance=10 ** (-16), max_sweeps=50):
-    # run jacobi
+    """Compute eigenvalues and eigenvectors with the Jacobi method
+
+    Args:
+        A: Square symmetric matrix
+        tolerance: Convergence threshold for off-diagonal elements
+        max_sweeps: Maximum allowed number of Jacobi sweeps
+
+    Returns:
+        Tuple containing sorted eigenvalues, eigenvectors, and the number of Jacobi sweeps
+    """
+
     if not np.allclose(A, np.transpose(A)):
         raise ValueError("Matrix must be symmetric")
 
