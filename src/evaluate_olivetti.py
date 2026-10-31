@@ -98,7 +98,11 @@ if use_n_percent_k:
 else:
     print("Choose k (1 ≤ k ≤ 280)")
     while True:
-        ch_k = int(input())
+        try:
+            ch_k = int(input())
+        except:
+            print("Please make sure k is an integer")
+            continue
         if ch_k >= 1 and ch_k <= 280:
             k = ch_k
             break
